@@ -5,14 +5,21 @@ import { unzipSync } from 'fflate';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
-// Once materialized into Git, prefer these editable files and never overwrite
-// normal source edits from the archive snapshot.
-if (
-  existsSync(resolve(root, 'src/App.tsx')) &&
-  existsSync(resolve(root, 'src/main.tsx')) &&
-  existsSync(resolve(root, 'src/styles.css'))
-) {
-  console.log('Using checked-in application source files');
+// Skip the archive only when the complete editable project is checked in.
+const requiredFiles = [
+  'src/App.tsx',
+  'src/main.tsx',
+  'src/styles.css',
+  'tsconfig.json',
+  'tsconfig.app.json',
+  'tsconfig.node.json',
+  'vite.config.ts',
+  'scripts/browser-performance.mjs',
+  'public/favicon.svg',
+];
+
+if (requiredFiles.every((path) => existsSync(resolve(root, path)))) {
+  console.log('Using complete checked-in application source files');
   process.exit(0);
 }
 
@@ -44,4 +51,4 @@ for (const [name, bytes] of Object.entries(entries)) {
   extracted += 1;
 }
 
-console.log(`Restored ${extracted} existing project files from the original source archive`);
+console.log(`Restored ${extracted} original project files from the source archive`);
