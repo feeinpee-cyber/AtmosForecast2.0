@@ -1,9 +1,21 @@
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { unzipSync } from 'fflate';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+
+// Once materialized into Git, prefer these editable files and never overwrite
+// normal source edits from the archive snapshot.
+if (
+  existsSync(resolve(root, 'src/App.tsx')) &&
+  existsSync(resolve(root, 'src/main.tsx')) &&
+  existsSync(resolve(root, 'src/styles.css'))
+) {
+  console.log('Using checked-in application source files');
+  process.exit(0);
+}
+
 const partsDir = resolve(root, 'source-parts');
 const parts = readdirSync(partsDir)
   .filter((name) => name.startsWith('atmos-source.') && name.endsWith('.b64'))
