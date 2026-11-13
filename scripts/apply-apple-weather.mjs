@@ -15,6 +15,10 @@ if (footerStart >= 0 && footerEnd >= 0) {
   throw new Error('Could not locate the existing app footer to add the developer credit.');
 }
 app = app.replace('THE WEATHER, IN ITS ELEMENT', 'WEATHER');
+app = app.replace('<span>atmos<span className="brand-period">.</span></span>', '<span>Weather</span>');
+app = app.replace('aria-label="Atmos home"', 'aria-label="Weather home"');
+app = app.replace('ATMOS /', 'WEATHER /');
+app = app.replace('EXPLORE THE ATMOSPHERE', 'WEATHER MAP');
 app = app.replace('className="kicker-divider">/</span>', 'className="kicker-divider">·</span>');
 writeFileSync(appPath, app);
 
