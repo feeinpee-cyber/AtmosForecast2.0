@@ -26,7 +26,7 @@ writeFileSync(mainPath, main);
 
 let html = readFileSync(htmlPath, 'utf8');
 html = html.replace('<title>Atmos — Weather, in its element</title>', '<title>AtmosForecast 2.0 — Weather</title>');
-html = html.replace('An atmospheric, thoughtfully designed weather experience.', 'Current conditions, hourly forecasts, 10-day outlook and weather details.');
+html = html.replace('Atmos — an atmospheric, thoughtfully designed weather experience.', 'A beautiful, detailed weather forecast with live conditions, hourly outlook and a 10-day forecast.');
 writeFileSync(htmlPath, html);
 
 console.log('Applied the AtmosForecast 2.0 Weather-inspired presentation and developer credit');
