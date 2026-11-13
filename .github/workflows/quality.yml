@@ -1,0 +1,58 @@
+name: Production build and browser performance
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-browser-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Verify production TypeScript and Vite build
+        run: npm run build
+
+      - name: Install Chromium for browser checks
+        run: npx playwright install --with-deps chromium
+
+      - name: Start the production preview server
+        run: |
+          npm run preview -- --host 127.0.0.1 > /tmp/atmos-preview.log 2>&1 &
+          for attempt in $(seq 1 40); do
+            if curl --silent --fail http://127.0.0.1:4173/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/atmos-preview.log
+          exit 1
+
+      - name: Run desktop and mobile browser checks
+        run: npm run test:browser
+
+      - name: Upload build and browser test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: atmosforecast2-quality-results
+          path: |
+            dist/
+            browser-performance-results.json
+            /tmp/atmos-preview.log
+          if-no-files-found: warn
+          retention-days: 14
