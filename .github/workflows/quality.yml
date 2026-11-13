@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build-and-browser-test:
@@ -28,19 +28,6 @@ jobs:
 
       - name: Verify production TypeScript and Vite build
         run: npm run build
-
-      - name: Commit all materialized application source files on first build
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/ index.html public/ tsconfig.json tsconfig.app.json tsconfig.node.json vite.config.ts scripts/browser-performance.mjs
-          if git diff --cached --quiet; then
-            echo "All application source and project config files are already checked in."
-          else
-            git commit -m "Materialize complete application source for direct editing"
-            git push origin HEAD:main
-          fi
 
       - name: Install Chromium for browser checks
         run: npx playwright install --with-deps chromium
