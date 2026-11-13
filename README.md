@@ -1,6 +1,6 @@
 # AtmosForecast 2.0
 
-AtmosForecast 2.0 carries forward the existing Atmos Weather app and its data engine, interactions, search, saved locations, unit preferences, detail panels and radar map. This version changes the presentation layer to an iOS Weather-inspired layout rather than rebuilding the app from scratch.
+AtmosForecast 2.0 carries forward the existing Atmos Weather app and its weather engine, search, saved locations, unit preferences, detail panels and radar map. The visual layer is restyled around the clean, atmospheric hierarchy of Apple Weather while keeping this project’s own branding and implementation.
 
 ## Features carried over
 - Live current conditions, 24-hour outlook and 10-day forecast from Open-Meteo
@@ -24,7 +24,11 @@ npm run preview
 npm run test:browser
 ```
 
-GitHub Actions runs the strict TypeScript/Vite production build and Playwright checks at desktop (1440×1000) and mobile (390×844) viewport sizes. The browser test samples requestAnimationFrame pacing with weather effects active, checks for runtime errors and horizontal overflow, and exercises the settings and lazy map views. CI frame pacing is a regression measurement on a virtualized runner, not a native-device GPU benchmark.
+GitHub Actions runs the strict TypeScript/Vite production build and Playwright checks at desktop (1440×1000) and mobile (390×844) viewport sizes. The browser test samples requestAnimationFrame pacing with weather effects active, checks for runtime errors and horizontal overflow, and exercises settings and lazy map navigation.
+
+The first successful push build materializes the original app source into ordinary files under `src/`, then commits those files back to `main` so they can be browsed and edited directly on GitHub. After that, builds use the checked-in source files and do not overwrite them from the original archive snapshot in `source-parts/`.
+
+CI frame pacing is a regression measurement on a virtualized runner, not a native-device GPU benchmark.
 
 ## Cloudflare Pages
 - Branch: `main`
