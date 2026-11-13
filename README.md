@@ -24,11 +24,9 @@ npm run preview
 npm run test:browser
 ```
 
-GitHub Actions runs the strict TypeScript/Vite production build and Playwright checks at desktop (1440×1000) and mobile (390×844) viewport sizes. The browser test samples requestAnimationFrame pacing with weather effects active, checks for runtime errors and horizontal overflow, and exercises settings and lazy map navigation.
+The application source is checked in as ordinary editable files under `src/`. The original source snapshot in `source-parts/` is only used as a fallback if those source files are missing. The pre-build script checks for the tracked files first and does not overwrite normal edits.
 
-The first successful push build materializes the original app source into ordinary files under `src/`, then commits those files back to `main` so they can be browsed and edited directly on GitHub. After that, builds use the checked-in source files and do not overwrite them from the original archive snapshot in `source-parts/`.
-
-CI frame pacing is a regression measurement on a virtualized runner, not a native-device GPU benchmark.
+GitHub Actions runs the strict TypeScript/Vite production build and Playwright checks at desktop (1440×1000) and mobile (390×844) viewport sizes. The browser test samples requestAnimationFrame pacing with weather effects active, checks for runtime errors and horizontal overflow, and exercises settings and lazy map navigation. CI frame pacing is a regression measurement on a virtualized runner, not a native-device GPU benchmark.
 
 ## Cloudflare Pages
 - Branch: `main`
